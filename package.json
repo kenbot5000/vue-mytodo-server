@@ -1,0 +1,31 @@
+{
+  "name": "vue-mytodo-server",
+  "version": "1.0.0",
+  "description": "Express.js API backend of my to-do app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kenbot5000/vue-mytodo-server.git"
+  },
+  "keywords": [
+    "expressjs"
+  ],
+  "author": "Rionn Kenshin Pineda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kenbot5000/vue-mytodo-server/issues"
+  },
+  "homepage": "https://github.com/kenbot5000/vue-mytodo-server#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "consola": "^2.14.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.20",
+    "nodemon": "^2.0.4"
+  }
+}
