@@ -14,11 +14,13 @@ router.get('/users', async (req, res) => {
 // Get a user
 router.get('/users/:username', async (req, res) => {
   let user = await User.findOne({ username: req.params.username });
-  if (user != undefined) {
-    res.json(user);
+  if(req.query.checkUserExists != undefined && req.query.checkUserExists == 'true') {
+    return res.json(user != undefined ? true : false);
+  }
+  if (user != undefined) { 
+    res.json(user)
   } else {
-    res.status = 404;
-    res.json({ "response": "User not found!" });
+    res.status(404).json({ "response": "User not found!" });
   }
 });
 

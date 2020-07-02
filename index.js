@@ -7,7 +7,7 @@ const app = express();
 const api = require('./router');
 
 app.use(bodyParser.json());
-app.use('/api', api);
+app.use('/', api);
 
 const host = process.env.HOST;
 const port = process.env.PORT;
