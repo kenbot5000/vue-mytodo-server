@@ -1,7 +1,15 @@
-let express = require('express');
-let mongoose = require('mongoose');
-let router = express.Router();
-let {User, Item} = require('./models');
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const router = express.Router();
+const ItemImports = require('./models/items');
+const UserImports = require('./models/users');
+const jsonwebtoken = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const jwtkey = process.env.JWT_SECRET;
+
+const Item = ItemImports.Item;
+const User = UserImports.User;
 
 mongoose.connect('mongodb://localhost/mytodo', { useNewUrlParser: true,  useUnifiedTopology: true }); 
 
@@ -22,17 +30,6 @@ router.get('/users/:username', async (req, res) => {
   } else {
     res.status(404).json({ "response": "User not found!" });
   }
-});
-
-// Add a new user
-router.post('/users', async (req, res) => {
-  let newUser = new User({
-    username: req.body.username,
-    password: req.body.password
-  });
-
-  newUser.save();
-  res.json(newUser);
 });
 
 // Patch a user
@@ -140,5 +137,43 @@ router.delete('/todo/:username/:id', async (req, res) => {
   } catch {
     res.status(404).json({"response": "Item not found!"});
   }
-})
+});
+
+// Auth register
+router.post('/auth/register', async (req, res) => {
+  let salt = bcrypt.genSaltSync(10);
+  let hash = bcrypt.hashSync(req.body.password, salt)
+  
+  let newUser = new User({
+    username: req.body.username,  
+    password: hash
+  });
+
+  let userObject = {"username" : req.body.username}
+
+  // await newUser.save();
+  const token = jsonwebtoken.sign(userObject, jwtkey);
+  res.json({token: token});
+});
+
+// Auth login
+router.post('/auth/login', async (req, res) => {
+  // Compare username
+  let user;
+  try {
+    user = await User.findOne({ username: req.body.username });
+  } catch {
+    res.status(404).json({ "response": "User not found!" });
+  }
+
+  // Compare password
+  let pwtrue = bcrypt.compareSync(req.body.password, user.password)
+  if(pwtrue) {
+    let userObject = {"username" : req.body.username}
+    const token = jsonwebtoken.sign(userObject, jwtkey);
+    res.json({ token: token })
+  } else {
+    res.json({ "response": "Password is incorrect" });
+  }
+});
 module.exports = router;
