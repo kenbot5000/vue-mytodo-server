@@ -21,10 +21,10 @@
   },
   "homepage": "https://github.com/kenbot5000/vue-mytodo-server#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "consola": "^2.14.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "mongoose": "^5.9.20",
     "nodemon": "^2.0.4"
   }
